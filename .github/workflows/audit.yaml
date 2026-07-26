@@ -8,7 +8,7 @@ on:
 
 jobs:
   audit:
-    runs-on: ububtu-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checout@v2
 
