@@ -28,28 +28,7 @@ func (app *application) notFoundError(w http.ResponseWriter, r *http.Request, er
 		app.logger.Errorw("failed to write error response", zap.Error(writeErr))
 	}
 }
-func (app *application) methodNotAllowedError(w http.ResponseWriter, r *http.Request, err error) {
-	app.logger.Errorw("method not allowed",
-		zap.Error(err),
-		zap.String("method", r.Method),
-		zap.String("path", r.URL.Path),
-		zap.Int("status", http.StatusMethodNotAllowed),
-	)
-	if writeErr := WriteJSONError(w, http.StatusMethodNotAllowed, "not allowed"); writeErr != nil {
-		app.logger.Errorw("failed to write error response", zap.Error(writeErr))
-	}
-}
-func (app *application) unauthorizedError(w http.ResponseWriter, r *http.Request, err error) {
-	app.logger.Errorw("unauthorized",
-		zap.Error(err),
-		zap.String("method", r.Method),
-		zap.String("path", r.URL.Path),
-		zap.Int("status", http.StatusUnauthorized),
-	)
-	if writeErr := WriteJSONError(w, http.StatusUnauthorized, "unauthorized"); writeErr != nil {
-		app.logger.Errorw("failed to write error response", zap.Error(writeErr))
-	}
-}
+
 func (app *application) internalServerError(w http.ResponseWriter, r *http.Request, err error) {
 	app.logger.Errorw("internal server error",
 		zap.Error(err),
@@ -58,17 +37,6 @@ func (app *application) internalServerError(w http.ResponseWriter, r *http.Reque
 		zap.Int("status", http.StatusInternalServerError),
 	)
 	if writeErr := WriteJSONError(w, http.StatusInternalServerError, "the server encountered a problem"); writeErr != nil {
-		app.logger.Errorw("failed to write error response", zap.Error(writeErr))
-	}
-}
-func (app *application) notImplementedError(w http.ResponseWriter, r *http.Request, err error) {
-	app.logger.Errorw("not implemented",
-		zap.Error(err),
-		zap.String("method", r.Method),
-		zap.String("path", r.URL.Path),
-		zap.Int("status", http.StatusNotImplemented),
-	)
-	if writeErr := WriteJSONError(w, http.StatusNotImplemented, "not implemented"); writeErr != nil {
 		app.logger.Errorw("failed to write error response", zap.Error(writeErr))
 	}
 }

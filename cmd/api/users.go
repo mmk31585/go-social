@@ -146,30 +146,6 @@ func (app *application) followUserHandler(w http.ResponseWriter, r *http.Request
 func (app *application) unfollowUserHandler(w http.ResponseWriter, r *http.Request) {
 	app.handleUserAction(w, r, app.store.Followers.Unfollow)
 }
-func (app *application) userContextMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-		idStr := chi.URLParam(r, "id")
-		id, err := strconv.ParseInt(idStr, 10, 64)
-		if err != nil {
-			app.badRequestError(w, r, err)
-			return
-		}
-		ctx := r.Context()
-		user, err := app.store.Users.GetByID(ctx, id)
-		if err != nil {
-			switch err {
-			case store.ErrNotFound:
-				app.notFoundError(w, r, err)
-			default:
-				app.internalServerError(w, r, err)
-				return
-			}
-		}
-		ctx = context.WithValue(ctx, userCtx, user)
-		next.ServeHTTP(w, r.WithContext(ctx))
-	})
-}
 func GetUserFromContext(r *http.Request) *store.User {
 	user, _ := r.Context().Value(userCtx).(*store.User)
 	return user
