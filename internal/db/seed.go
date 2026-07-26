@@ -10,7 +10,6 @@ import (
 )
 
 var usernames = []string{"user", "player", "dev", "admin", "member", "guest", "pro", "master", "hero", "star"}
-var passwords = []string{"123", "x", "pro", "99", "2024", "cool", "zone", "king", "lord", "ace"}
 var emails = []string{"gmail.com", "yahoo.com", "hotmail.com", "outlook.com", "example.com"}
 var titles = []string{
 	"10 AI Tools That Will Change How You Work in 2026",
