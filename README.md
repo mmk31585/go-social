@@ -189,8 +189,6 @@ Version | Supported? | Import | Notes
 Yes, please! [`Makefile`](Makefile) is your friend,
 read the [development guide](CONTRIBUTING.md).
 
-Also have a look at the [FAQ](FAQ.md).
-
 ---
 
 Looking for alternatives? [https://awesome-go.com/#database](https://awesome-go.com/#database).
