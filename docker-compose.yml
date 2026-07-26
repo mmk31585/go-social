@@ -1,0 +1,62 @@
+services:
+  db:
+    image: postgres:17
+    container_name: postgres-db
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-social}
+      POSTGRES_USER: ${POSTGRES_USER:-admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-adminpassword}
+      PGPORT: ${POSTGRES_PORT:-5435}
+    ports:
+      - "${POSTGRES_PORT:-5435}:${POSTGRES_PORT:-5435}"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-admin} -d ${POSTGRES_DB:-social} -h localhost -p ${POSTGRES_PORT:-5435}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - socialapp_network
+  redis:
+    image: redis:8.8.0
+    restart: unless-stopped
+    container_name: redis
+    ports:
+      - "6380:6379"
+    command: redis-server --save 60 1 --loglevel warning
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - socialapp_network
+
+  redis-commander:
+    container_name: redis-commander
+    hostname: redis-commander
+    image: rediscommander/redis-commander:latest
+    environment:
+    - REDIS_HOST=redis
+    - REDIS_PORT=6379
+    ports:
+      - "127.0.0.1:8081:8081"
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart:
+      unless-stopped
+    networks:
+      - socialapp_network
+
+networks:
+  socialapp_network:
+    name: socialapp_network
+    driver: bridge
+
+volumes:
+  postgres_data:
